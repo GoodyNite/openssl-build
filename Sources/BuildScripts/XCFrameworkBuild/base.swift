@@ -315,7 +315,35 @@ class BaseBuild {
 
     func frameworks() throws -> [String] {
         [library.rawValue]
+    }private func dSYMPath(forFrameworkPath frameworkPath: String) -> String? {
+        let frameworkURL = URL(fileURLWithPath: frameworkPath)
+        let dSYMURL = frameworkURL.deletingPathExtension().appendingPathExtension("framework.dSYM")
+        guard FileManager.default.fileExists(atPath: dSYMURL.path) else {
+            return nil
+        }
+        return dSYMURL.path
     }
+
+    private func generateDSYMIfPossible(forFramework framework: String, at frameworkDir: URL) throws {
+        let binaryURL = frameworkDir + framework
+        guard FileManager.default.fileExists(atPath: binaryURL.path) else {
+            return
+        }
+
+        let dSYMURL = frameworkDir.deletingPathExtension().appendingPathExtension("framework.dSYM")
+        try? FileManager.default.removeItem(at: dSYMURL)
+
+        do {
+            try Utility.launch(
+                path: "/usr/bin/xcrun",
+                arguments: ["dsymutil", binaryURL.path, "-o", dSYMURL.path]
+            )
+        } catch {
+            try? FileManager.default.removeItem(at: dSYMURL)
+        }
+    }
+
+
 
     func createXCFramework() throws {
         // clean all old xcframework
