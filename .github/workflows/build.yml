@@ -53,7 +53,7 @@ jobs:
 
     - name: Build
       run: |
-        make build version=${{ env.RELEASE_VERSION }}
+        make build enable-deubg version=${{ env.RELEASE_VERSION }}
     
     - name: Update Package.swift
       run: |
