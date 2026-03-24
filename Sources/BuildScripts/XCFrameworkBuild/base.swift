@@ -363,6 +363,10 @@ class BaseBuild {
         for frameworkPath in paths {
             arguments.append("-framework")
             arguments.append(frameworkPath)
+            if let dSYMPath = dSYMPath(forFrameworkPath: frameworkPath) {
+                arguments.append("-debug-symbols")
+                arguments.append(dSYMPath)
+            }
         }
         arguments.append("-output")
         let XCFrameworkFile = self.xcframeworkDirectoryURL + [name + ".xcframework"]
