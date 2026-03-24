@@ -315,7 +315,9 @@ class BaseBuild {
 
     func frameworks() throws -> [String] {
         [library.rawValue]
-    }private func dSYMPath(forFrameworkPath frameworkPath: String) -> String? {
+    }
+
+    private func dSYMPath(forFrameworkPath frameworkPath: String) -> String? {
         let frameworkURL = URL(fileURLWithPath: frameworkPath)
         let dSYMURL = frameworkURL.deletingPathExtension().appendingPathExtension("framework.dSYM")
         guard FileManager.default.fileExists(atPath: dSYMURL.path) else {
@@ -342,7 +344,6 @@ class BaseBuild {
             try? FileManager.default.removeItem(at: dSYMURL)
         }
     }
-
 
 
     func createXCFramework() throws {
