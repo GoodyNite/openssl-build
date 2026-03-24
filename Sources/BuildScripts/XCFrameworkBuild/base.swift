@@ -435,6 +435,7 @@ class BaseBuild {
         // It was originally using `platform.minVersion`
         createPlist(path: frameworkDir.path + "/Info.plist", name: framework, minVersion: "100.0", platform: platform.sdk)
         try fixShallowBundles(framework: framework, platform: platform, frameworkDir: frameworkDir)
+        try generateDSYMIfPossible(forFramework: framework, at: frameworkDir)
         return frameworkDir.path
     }
 
